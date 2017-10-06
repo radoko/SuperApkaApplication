@@ -1,0 +1,26 @@
+version: '2'
+services:
+    superapkaapplication-app:
+        image: superapkaapplication
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_DATASOURCE_URL=jdbc:mariadb://superapkaapplication-mariadb:3306/superapkaapplication
+            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
+            - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
+            - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=zookeeper
+        ports:
+            - 8080:8080
+    superapkaapplication-mariadb:
+        extends:
+            file: mariadb.yml
+            service: superapkaapplication-mariadb
+    kafka:
+        extends:
+            file: kafka.yml
+            service: kafka
+        environment:
+            - KAFKA_ADVERTISED_HOST_NAME=kafka
+    zookeeper:
+        extends:
+            file: kafka.yml
+            service: zookeeper
